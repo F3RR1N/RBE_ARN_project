@@ -1,0 +1,42 @@
+<?xml version='1.0'?>
+<robot name="Rover" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- This adds the laser macro, including the scan for gazebo and link name -->
+  <xacro:include filename="$(find lms1xx)/urdf/sick_lms1xx.urdf.xacro" />
+  <!--xacro:include filename="$(find hector_sensors_description)/urdf/sensors/hokuyo_utm30lx.urdf.xacro" /-->
+  <xacro name="laser_scan" parent="base" ros_topic="base_scan/scan"
+      update_rate="20" min_angle="-1.57" max_angle="1.57" >
+          <origin xyz="${0.4 - 0.01 - 0.04} 0 0.3" rpy="0 0 0" />
+      </xacro>
+      <lms1xx_model name="laser" parent="base_footprint">
+          <origin xyz="0 0 +0.30" rpy="0 0 0" />
+        </lms1xx_model>
+      <!-- This adds a visual box to allow us to see the Hokuyo in rviz/gazebo -->
+      <joint name="laser_joint" type="fixed">
+          <origin xyz="${0.4 - 0.01 - 0.04} 0 0.3" rpy="0 0 0" />
+          <parent link="base_footprint" />
+          <child link="laser_link"/>
+      </joint>
+      <link name="laser_link">
+          <inertial>
+              <mass value="0.01" />
+              <origin xyz="0 0 0" />
+              <inertia ixx="0.001"  ixy="0.0"  ixz="0.0"
+              iyy="0.001"  iyz="0.0"
+                  izz="0.001" />
+              </inertial>
+              <visual>
+                  <origin xyz="0 0 0" rpy="0 0 0"/>
+                  <geometry>
+                      <box size="0.05 0.05 0.1" />
+                  </geometry>
+              </visual>
+              <collision>
+                  <origin xyz="0 0 0" rpy="0 0 0"/>
+                  <geometry>
+                      <box size="0.05 0.05 0.1" />
+                  </geometry>
+              </collision>
+          </link>
+
+</robot>
